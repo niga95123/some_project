@@ -2,12 +2,14 @@
 
 namespace App\Repository\Guest;
 
-use App\Dto\Command\CreateTechGuestCommand;
+use App\Dto\Command\CRUDTechGuestCommand;
+use App\Dto\Response\ErrorBodyResponse;
 use App\Entity\Guest\TechGuest;
 use App\Entity\TechCountryPhoneNumber;
 use App\Repository\Base\BaseRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 
 class TechGuestRepository extends BaseRepository
 {
@@ -50,24 +52,18 @@ class TechGuestRepository extends BaseRepository
 
                             return $newEntity;
                         }
-                        return [
-                            'type' => 'Ошибка валидации данных',
-                            'explain' => 'Не найден код страны'
-                        ];
+                        return new ErrorBodyResponse(ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                            Response::HTTP_UNPROCESSABLE_ENTITY, ['explain' => 'Не найден код страны']);
                     }
-                    return [
-                        'type' => 'Ошибка валидации данных',
-                        'explain' => 'Гость с данным email уже существует'
-                    ];
+                    return new ErrorBodyResponse(ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                        Response::HTTP_UNPROCESSABLE_ENTITY, ['explain' => 'Гость с данным email уже существует']);
                 }
-                return [
-                    'type' => 'Ошибка валидации данных',
-                    'explain' => 'Гость c данным номером уже существует'
-                ];
+                return new ErrorBodyResponse(ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                    Response::HTTP_UNPROCESSABLE_ENTITY, ['explain' => 'Гость c данным номером уже существует']);
             });
     }
 
-    public function updateGuestFromTechGuestCommand(CreateTechGuestCommand $command, TechGuest $techGuest): mixed
+    public function updateGuestFromTechGuestCommand(CRUDTechGuestCommand $command, TechGuest $techGuest): mixed
     {
         return $this->entityManager->wrapInTransaction(
             function (EntityManagerInterface $entityManager) use ($command, $techGuest) {
@@ -86,10 +82,8 @@ class TechGuestRepository extends BaseRepository
 
                     return $techGuest;
                 }
-                return [
-                    'type' => 'Ошибка валидации данных',
-                    'explain' => 'Не найден код страны'
-                ];
+                return new ErrorBodyResponse(ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                    Response::HTTP_UNPROCESSABLE_ENTITY, ['explain' => 'Не найден код страны']);
             });
     }
 

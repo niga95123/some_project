@@ -22,12 +22,4 @@ class DebugHeadersMiddleware
         $response->headers->set('X-Debug-Time', microtime(true) - $request->server->get('REQUEST_TIME_FLOAT'));
         $response->headers->set('X-Debug-Memory', round(memory_get_peak_usage(true) / 1024 / 1024, 2) . ' MB');
     }
-
-    // ИЛИ Вариант 2: Используем __invoke
-    /*
-    public function __invoke(ResponseEvent $event): void
-    {
-        // Та же логика, что и выше
-    }
-    */
 }

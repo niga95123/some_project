@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\Response\ErrorBodyResponse;
 use App\Dto\TechGuestDetailResponse;
 use App\Entity\Guest\TechGuest;
 use App\Service\Http\StreamedJsonResponseBuilder;
@@ -39,25 +40,36 @@ class GetTechGuestAction extends AbstractController
             ),
             new OA\Response(
                 response: Response::HTTP_BAD_REQUEST,
-                description: 'Некорректный запрос'
+                description: ErrorBodyResponse::HTTP_BAD_REQUEST_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_UNAUTHORIZED,
-                description: 'Не авторизован'
+                description: ErrorBodyResponse::HTTP_UNAUTHORIZED_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: 'Ошибка валидации данных'
+                description: ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Внутренняя ошибка сервера'
+                description: ErrorBodyResponse::HTTP_INTERNAL_SERVER_ERROR_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             )
         ]
     )]
     public function __invoke(TechGuest $guest): Response
     {
-        $startTime = microtime(true);
        return $this->responder->ok(TechGuestDetailResponse::fromEntity($guest));
     }
 

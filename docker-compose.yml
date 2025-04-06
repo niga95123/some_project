@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  shop-php-fpm:
-    container_name: shop-php-fpm
+  php-fpm:
+    container_name: php-fpm
     restart: always
     build:
       context: .
@@ -13,12 +13,12 @@ services:
     volumes:
       - ./:/var/www/shop
 
-  shop-nginx:
+  nginx:
     image: nginx:latest
-    container_name: shop-nginx
+    container_name: nginx
     restart: always
     depends_on:
-      - shop-php-fpm
+      - php-fpm
     ports:
       - "8888:80"
     volumes:

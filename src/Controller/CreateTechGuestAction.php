@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Dto\Command\CreateTechGuestCommand;
+use App\Dto\Command\CRUDTechGuestCommand;
+use App\Dto\Response\ErrorBodyResponse;
 use App\Dto\TechGuestDetailResponse;
 use App\Service\Handler\Guest\Create\CreateTechGuestMessage;
 use App\Service\Http\StreamedJsonResponseBuilder;
@@ -32,7 +33,7 @@ class CreateTechGuestAction extends AbstractController
         description: 'Создание гостя.',
         summary: 'Создать гостя',
         requestBody: new OA\RequestBody(
-            content: new Nelmio\Model(type: CreateTechGuestCommand::class)
+            content: new Nelmio\Model(type: CRUDTechGuestCommand::class)
         ),
         tags: ['Guest'],
         responses: [
@@ -45,23 +46,35 @@ class CreateTechGuestAction extends AbstractController
             ),
             new OA\Response(
                 response: Response::HTTP_BAD_REQUEST,
-                description: 'Некорректный запрос'
+                description: ErrorBodyResponse::HTTP_BAD_REQUEST_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_UNAUTHORIZED,
-                description: 'Не авторизован'
+                description: ErrorBodyResponse::HTTP_UNAUTHORIZED_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: 'Ошибка валидации данных'
+                description: ErrorBodyResponse::HTTP_UNPROCESSABLE_ENTITY_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             ),
             new OA\Response(
                 response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Внутренняя ошибка сервера'
+                description: ErrorBodyResponse::HTTP_INTERNAL_SERVER_ERROR_MESSAGE,
+                content: new Nelmio\Model(
+                    type: ErrorBodyResponse::class,
+                )
             )
         ]
     )]
-    public function __invoke(#[MapRequestPayload(acceptFormat: 'json', validationFailedStatusCode: 422)] CreateTechGuestCommand $command): Response
+    public function __invoke(#[MapRequestPayload(acceptFormat: 'json', validationFailedStatusCode: 422)] CRUDTechGuestCommand $command): Response
     {
         $source = $this->messageBus->dispatch(new CreateTechGuestMessage($command))
             ->last(HandledStamp::class)

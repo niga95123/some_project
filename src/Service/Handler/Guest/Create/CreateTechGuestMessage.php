@@ -2,14 +2,14 @@
 
 namespace App\Service\Handler\Guest\Create;
 
-use App\Dto\Command\CreateTechGuestCommand;
+use App\Dto\Command\CRUDTechGuestCommand;
 
 final class CreateTechGuestMessage
 {
-    public function __construct(private readonly CreateTechGuestCommand $command) {
+    public function __construct(private readonly CRUDTechGuestCommand $command) {
     }
 
-    public function getCommand(): CreateTechGuestCommand
+    public function getCommand(): CRUDTechGuestCommand
     {
         return $this->command;
     }

@@ -2,18 +2,18 @@
 
 namespace App\Service\Handler\Guest\Update;
 
-use App\Dto\Command\CreateTechGuestCommand;
+use App\Dto\Command\CRUDTechGuestCommand;
 use App\Entity\Guest\TechGuest;
 
 final class UpdateTechGuestMessage
 {
     public function __construct(
-        private readonly CreateTechGuestCommand $command,
+        private readonly CRUDTechGuestCommand $command,
         private readonly TechGuest $techGuest
     ) {
     }
 
-    public function getCommand(): CreateTechGuestCommand
+    public function getCommand(): CRUDTechGuestCommand
     {
         return $this->command;
     }
