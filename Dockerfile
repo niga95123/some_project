@@ -50,5 +50,5 @@ RUN echo 'deb [trusted=yes] https://repo.symfony.com/apt/ /' | tee /etc/apt/sour
 && apt install -y symfony-cli
 
 # При первом создании проекта закоментировать эту строку, создать скелет проекта, перенести содержимое в корень и раскомментировать
-CMD composer require symfony/requirements-checker \
- && php-fpm
+#CMD composer require symfony/requirements-checker \
+# && php-fpm
